@@ -1,0 +1,221 @@
+{
+  "name": "Upwork Proposal v1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "WEBHOOK ID",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -592,
+        0
+      ],
+      "id": "2f0ae8ec-b331-4d83-a22f-f391ec73789c",
+      "name": "Webhook",
+      "webhookId": "WEBHOOK ID"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Technical Solution CV Response Agent – System Message\n\n## Context\n\nYou are an expert technical proposal writer specializing in creating concise, solution-focused CV responses for client projects.\n\nYou receive **structured JSON** with three key components:\n\n- **Role Name:** `{{ $json.role_name }}`\n- **Job Description:** `{{ $json.job_description }}`\n- **Candidate Profile:** `{{ $json.profile }}`\n\nThe `profile` object contains:\n- `name`, `contact`, `education`\n- `coreSkills`, `languages`\n- `workExperience[]` (company, role, period, achievements[])\n- `notableProjects[]` (name, description, tech[], repo?)\n- `personal` (running, traits[])\n\nAssume you are writing **on behalf of the candidate described in `profile`**.  \nAll experience, skills, and projects you mention **must come from or be consistent with** this profile.\n\n---\n\n## Primary Objective\n\nGenerate a focused CV-style response for the **{{ $json.role_name }}** position that:\n\n1. Shows deep understanding of the client’s needs from **{{ $json.job_description }}**\n2. Maps those needs directly to the candidate’s real experience from **{{ $json.profile }}**\n3. Presents a clear technical approach, supported by relevant past work and projects\n4. Is ready to be used as a tailored Upwork / proposal response\n\n---\n\n## Input Analysis Requirements\n\n1. Analyze the **job description** (`{{ $json.job_description }}`) to extract:\n   - Core business problems and technical challenges\n   - Stack and tools mentioned (e.g., SQL, Python, SSRS, BI, reporting, interviewing, hiring)\n   - Explicit responsibilities and deliverables\n   - Implied needs (e.g., hiring rigor, avoiding bad hires, screening vs. real experience)\n\n2. Analyze the **profile** (`{{ $json.profile }}`) to extract:\n   - The most relevant skills from `coreSkills`\n   - The most relevant roles from `workExperience` (e.g., Hubcredo, Reachly)\n   - The most relevant `notableProjects` (e.g., automation workflows, evaluation systems, LaTeX resume generator, ETL, analytics)\n   - Any personal traits that reinforce reliability, rigor, and long-term value (e.g., disciplined runner, systems thinker)\n\n3. Build **all sections** by explicitly tying:\n   - The client’s needs → to specific elements in `profile.workExperience` and `profile.notableProjects`.\n\nDo **not** invent companies, titles, or projects that are not in the profile. You may rephrase but not fabricate.\n\n---\n\n## Required Output Structure\n\n### 1. Pain Point Extraction (Opening Section)\n\n- Identify and articulate **2–3 primary pain points** from `{{ $json.job_description }}`  \n  (e.g., difficulty validating real skills, risk of hiring underqualified analysts, lack of in-house technical expertise for interviews)\n- Show empathy and understanding of why these are challenging for the client\n- Connect these pain points to **business impact** (wrong hire, wasted time, unreliable reports)\n- Optionally hint at why the candidate’s background (from `profile`) is aligned to solve them\n- **Format:** 1 brief paragraph (3–4 sentences)\n\n---\n\n### 2. Technical Solution Breakdown\n\n- Provide a clear, step-by-step technical approach **tailored to {{ $json.role_name }}** and grounded in the candidate’s experience\n- Explicitly reference relevant experience, e.g.:\n  - Hubcredo: n8n workflows, automation, lead qualification\n  - Reachly: data validation, enrichment pipelines, QA, cross-team work\n  - Projects: ETL pipelines, analytics, resume/LaTeX evaluation workflows\n- Include specific technologies, methodologies, or frameworks from both:\n  - the job description (SQL, Python, interviewing, SSRS, BI, assessments)\n  - the profile (n8n, Clay, ETL, ML, dashboards, automation)\n- **Format:** Numbered list with 4–6 steps, each step:\n  - What will be done\n  - How it will be done technically\n  - How the candidate’s prior work proves capability\n\n---\n\n### 3. Solution Workflow Visualization (Mermaid Diagram)\n\nGenerate clean, professional mermaid code that:\n\n- Shows the **end-to-end workflow** for how the candidate will:\n  - Screen candidates\n  - Design technical questions/assessments\n  - Conduct interviews\n  - Evaluate results\n  - Provide final hiring recommendations\n- Includes key decision points and integrations (e.g., question bank design, SQL/Python tests, real-world tasks, scoring rubric)\n- Uses appropriate diagram type:\n  - `flowchart` for process\n  - `sequence` for interview/assessment interactions\n  - `graph/architecture` if modeling systems\n- Keeps complexity reasonable (8–12 nodes maximum)\n- Is syntactically correct and ready to render\n\n---\n\n### 4. Relevant Experience Section\n\n- Highlight **2–3 directly relevant experiences** drawn from `profile.workExperience` and `profile.notableProjects`, such as:\n  - Automation and scoring workflows (Hubcredo, Reachly, ETL projects)\n  - Building evaluation/ranking logic (resume → LaTeX workflow, predictive models, scoring rubrics)\n  - Data quality, validation, and rigorous pipeline design\n- For each bullet:\n  - Name the context (company/project)\n  - Briefly describe what was built/done\n  - Include a metric or tangible outcome if available (e.g., hours saved, data volume, predictive accuracy)\n  - Explicitly connect to what the client needs in {{ $json.role_name }} (e.g., screening, evaluation, interviews)\n- **Format:** 2–4 bullet points\n\n---\n\n### 5. Solution Summary\n\n- 2–3 sentences that synthesize:\n  - The main approach\n  - Why the candidate is uniquely suited (based on specific elements from `profile`)\n  - How this reduces risk and increases hiring confidence for the client\n- Keep it focused on **value to the client**.\n\n---\n\n### 6. Timeline & Call to Action\n\n- Provide **3–4 realistic milestones** for this engagement (e.g., setup, question design, first interviews, final recommendation)\n- Include approximate timing (e.g., “Days 1–2”, “Week 1”, “Week 2–3”) based on a reasonable consulting engagement, not long-term employment\n- End with a **clear, specific call to action**, showing readiness and availability\n\n---\n\n## Quality Guidelines\n\n- **Conciseness:** Keep the total response under 500 words (excluding mermaid code)\n- **Specificity:** Reference concrete elements from:\n  - `{{ $json.job_description }}` (requirements, tools, responsibilities)\n  - `{{ $json.profile }}` (roles, projects, skills)\n- **Honesty:** Do not fabricate experience; only reframe and highlight what exists in the profile\n- **Clarity:** Use accessible language; introduce technical details where they demonstrate competence\n- **Action-oriented:** Emphasize what the candidate will **do** for the client, not just what they know\n\n---\n\n## Mermaid Diagram Standards\n\n- Use a diagram type appropriate to the hiring workflow solution\n- Show a clear start and end\n- Include:\n  - Candidate screening\n  - Technical question/assessment creation\n  - Technical interviews\n  - Scoring/evaluation\n  - Final recommendation\n- Optionally annotate where the candidate’s past experience (automation, ETL, analytics) strengthens each step (via comments)\n\n---\n\n## Output Format Template\n\n```markdown\n## Pain Point Extraction\n[Paragraph summarizing 2–3 core hiring and technical evaluation challenges, grounded in {{ $json.job_description }}]\n\n## Technical Solution\n1. **[Step 1 Title]**: [What you will do + how it maps to your experience in `profile`]\n2. **[Step 2 Title]**: [Process + technologies, e.g., SQL/Python/assessment design]\n3. **[Step 3 Title]**: [Interview and validation flow]\n4. **[Step 4 Title]**: [Candidate scoring and ranking]\n5. **[Step 5 Title]**: [Final recommendation and handoff]\n\n## Solution Workflow\n```mermaid\n[Mermaid diagram visualizing the full hiring support workflow]\n\nRelevant Experience\n\n• [Experience 1 from workExperience/notableProjects]: [Outcome + link to client need]\n• [Experience 2]: [Outcome + link]\n• [Experience 3]: [Outcome + link]\n\nSolution Summary\n\n[2–3 sentences synthesizing how your background + approach solves their hiring problem]\n\nTimeline & Next Steps\n\t•\tDays 1–2: [Initial review + design of evaluation process]\n\t•\tDays 3–5: [First interviews and technical assessments]\n\t•\tFollowing Week: [Final interviews, ranking, and written recommendation]\n\nCall to Action: [Specific closer expressing readiness and fit for {{ $json.role_name }}]\n\n---\n\n## Processing Instructions\n\n1. Thoroughly parse `{{ $json.job_description }}` to understand the role’s needs.\n2. Thoroughly parse `{{ $json.profile }}` and select only the **most relevant** skills, roles, and projects.\n3. In every section, explicitly link the candidate’s real experience to the client’s requirements.\n4. Ensure the tone is confident but honest, grounded in actual `profile` data.\n5. Generate a mermaid diagram that truly reflects the described workflow, not a generic placeholder.\n\n---\n\n## Multi-Agent Note (Optional Use)\n\nIf this system is used in a multi-agent setup:\n\n- This agent is responsible for the **full CV-style narrative and tying profile → role**.\n- A separate **“Technical Solution & Diagram Agent”** may receive:\n  - `role_name`, `job_description`, and selected parts of `profile`\n  - And return a more detailed technical breakdown + mermaid code\n- In that case, this agent should still be able to:\n  - Integrate or lightly refine the other agent’s technical section\n  - Ensure consistency with the candidate’s real experience.\n\nAlways optimize for: **“Does this look like a highly tailored, honest, technically credible response from the candidate in `profile` for the role in `role_name`?”**",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        80,
+        0
+      ],
+      "id": "b7f8e24b-4e82-4d97-923c-3b3e0692a782",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "chatgpt-4o-latest"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        288
+      ],
+      "id": "REPLACE WITH OPENAI API KEY",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "rLJIAxqGtBcecOxy",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the incoming request body\nconst body = $input.first().json.body;\n\n// Return the values\nreturn [\n  {\n    json: {\n      role_name: body.role_name,\n      job_description: body.job_description\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "e808b561-bf19-49b1-9e78-07ab8bc996cc",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        864,
+        0
+      ],
+      "id": "8f443946-ff0b-484d-b674-804a644957c9",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node\n// Input: [{ \"output\": \"<markdown string>\" }]\n// Output: Parsed JSON without original output\n\nconst items = $input.all();\n\nfunction parseMarkdown(md) {\n\t// Remove ```markdown fences if present\n\tlet text = md.trim();\n\ttext = text.replace(/^```markdown\\s*/i, '');\n\ttext = text.replace(/```$/i, '');\n\ttext = text.trim();\n\n\tconst lines = text.split('\\n');\n\tconst sections = {};\n\tlet current = '_root';\n\tsections[current] = [];\n\n\tfor (const rawLine of lines) {\n\t\tconst line = rawLine.replace(/\\r$/, '');\n\t\tconst heading = /^##\\s+(.*)/.exec(line.trim());\n\n\t\tif (heading) {\n\t\t\tcurrent = heading[1].trim();\n\t\t\tif (!sections[current]) sections[current] = [];\n\t\t} else {\n\t\t\tsections[current].push(line);\n\t\t}\n\t}\n\n\tconst get = (section) => {\n\t\tif (!sections[section]) return null;\n\t\tconst val = sections[section].join('\\n').trim();\n\t\treturn val.length ? val : null;\n\t};\n\n\tconst painPointExtraction = get('Pain Point Extraction');\n\tconst technicalSolution = get('Technical Solution');\n\tconst workflowRaw = get('Solution Workflow');\n\tconst relevantExpRaw = get('Relevant Experience');\n\tconst solutionSummary = get('Solution Summary');\n\tconst timelineRaw = get('Timeline & Next Steps');\n\n\tlet workflowMermaid = null;\n\tif (workflowRaw) {\n\t\tconst m = /```mermaid([\\s\\S]*?)```/m.exec(workflowRaw);\n\t\tif (m && m[1]) workflowMermaid = m[1].trim();\n\t}\n\n\tlet relevantExperience = null;\n\tif (relevantExpRaw) {\n\t\trelevantExperience = relevantExpRaw\n\t\t\t.split('\\n')\n\t\t\t.map((l) => l.replace(/^[-•]\\s*/, '').trim())\n\t\t\t.filter((l) => l.length);\n\t}\n\n\tlet timeline = null;\n\tlet callToAction = null;\n\tif (timelineRaw) {\n\t\tconst parts = timelineRaw.split('**Call to Action**:');\n\t\ttimeline = parts[0].trim();\n\t\tif (parts[1]) callToAction = parts[1].trim();\n\t}\n\n\treturn {\n\t\tpainPointExtraction,\n\t\ttechnicalSolution,\n\t\tworkflowMermaid,\n\t\trelevantExperience,\n\t\tsolutionSummary,\n\t\ttimeline,\n\t\tcallToAction,\n\t};\n}\n\nreturn items.map(item => {\n\tconst parsed = parseMarkdown(item.json.output || '');\n\n\treturn {\n\t\tjson: parsed\n\t};\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        0
+      ],
+      "id": "50ada208-032a-4afa-9c72-331e9399ef09",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get incoming fields\nconst roleName = $input.first().json.role_name || null;\nconst jobDescription = $input.first().json.job_description || null;\n\n// Return personal DB + passthrough fields\nreturn [\n  {\n    json: {\n      role_name: roleName,\n      job_description: jobDescription,\n\n      profile: {\n        name: \"SungChun Huang\",\n        contact: {\n          phone: \"+66 0990618288\",\n          email: \"sungchun.hua@gmail.com\",\n          linkedin: \"linkedin.com/in/sungchun-huang-78a205205\",\n          github: \"github.com/Sungchunn\"\n        },\n\n        education: {\n          university: \"Mahidol University International College\",\n          major: \"International Relations Global Affairs\",\n          minors: [\"Computer Science\", \"Psychology\"],\n          period: \"2019–2025\"\n        },\n\n        coreSkills: [\n          \"Python (Pandas, NumPy, scikit-learn, statsmodels)\",\n          \"SQL / PostgreSQL / DuckDB\",\n          \"n8n automation workflows\",\n          \"Clay enrichment pipelines\",\n          \"REST API integrations\",\n          \"ETL pipelines (CSV, JSON, APIs, PostgreSQL)\",\n          \"Machine learning & forecasting\",\n          \"Streamlit, Plotly dashboards\",\n          \"Web scraping (Apify, Firecrawl, Zenrow, SerpAPI)\"\n        ],\n\n        languages: [\"English (Fluent)\", \"Chinese (Native)\", \"Thai (Basic)\"],\n\n        workExperience: [\n          {\n            company: \"Hubcredo (Remote, India)\",\n            role: \"Sales Automation Intern\",\n            period: \"Oct 2025 – Present\",\n            achievements: [\n              \"Designed full n8n automation generating targeted B2B accounting leads\",\n              \"Processed 50+ LinkedIn job posts daily through Apify → AI → Apollo → Reoon\",\n              \"Saved 20+ hours per week by automating ICP filtering and email verification\",\n              \"Delivered pre-qualified lead lists directly into campaign workflows\"\n            ]\n          },\n          {\n            company: \"Reachly.co (Bangkok)\",\n            role: \"GTM Engineer Intern\",\n            period: \"April 2025 – Oct 2025\",\n            achievements: [\n              \"Built Clay-based data enrichment workflows using Firecrawl, Zenrow, SerpAPI\",\n              \"Integrated RSS feeds, Trigify, and webhook systems for real-time enrichment\",\n              \"Standardized data QA protocols improving accuracy for APAC B2B clients\",\n              \"Worked cross-functionally with KAMs to build data-driven client pipelines\"\n            ]\n          }\n        ],\n\n        notableProjects: [\n          {\n            name: \"Resume → LaTeX Generator Workflow\",\n            description:\n              \"Built automation accepting a PDF resume and job description. The AI evaluates gaps, generates improved LaTeX code, and renders the PDF in real-time using a React frontend.\",\n            tech: [\"n8n\", \"GPT-4.1\", \"LaTeX\", \"React\", \"PDF rendering\"]\n          },\n          {\n            name: \"51M LinkedIn User Search Engine\",\n            description:\n              \"Created full-stack application enabling sub-second search on 51M profiles using DuckDB + Parquet files. Integrated advanced filtering for B2B lead-gen.\",\n            tech: [\"DuckDB\", \"JavaScript\", \"React\", \"Parquet\", \"Full-stack\"],\n            repo: \"github.com/Sungchunn/51M-Linkedin-user-DB\"\n          },\n          {\n            name: \"Multi-Source ETL Pipeline\",\n            description:\n              \"Automated processing of 1.9M+ records from CSV, JSON APIs, and SQL sources with validation, deduplication, and dashboard outputs.\",\n            tech: [\"Python\", \"Pandas\", \"SQLAlchemy\", \"Plotly\"]\n          },\n          {\n            name: \"Predictive Analytics System\",\n            description:\n              \"Built models achieving 379% ROI prediction, 100% churn accuracy, and time-series forecasting.\",\n            tech: [\"Python\", \"scikit-learn\", \"statsmodels\"]\n          }\n        ],\n\n        personal: {\n          running: \"Completed Garmin Half Marathon (2h06). Weekly 25–35 km endurance training.\",\n          traits: [\"introverted\", \"disciplined\", \"systems thinker\"]\n        }\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "6b3a7147-c1f7-433e-9bf5-dcc021d3a04d",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "jsCode": "function removeMarkdownBold(text) {\n  if (!text || typeof text !== \"string\") return text;\n  return text.replace(/\\*\\*/g, \"\");\n}\n\nreturn $input.all().map(item => {\n  const data = item.json;\n\n  const clean = {\n    painPointExtraction: removeMarkdownBold(data.painPointExtraction),\n    technicalSolution: removeMarkdownBold(data.technicalSolution),\n    workflowMermaid: removeMarkdownBold(data.workflowMermaid),\n    solutionSummary: removeMarkdownBold(data.solutionSummary),\n    timeline: removeMarkdownBold(data.timeline),\n    callToAction: removeMarkdownBold(data.callToAction),\n    relevantExperience: Array.isArray(data.relevantExperience)\n      ? data.relevantExperience.map(row => removeMarkdownBold(row))\n      : null\n  };\n\n  return { json: clean };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        0
+      ],
+      "id": "71068b5c-c4ea-4a80-bc9e-c21d04880e49",
+      "name": "Code in JavaScript3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4cf3c16f-f277-4da4-9d5f-bd122a7cecb6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "56782c19e1f9cbd1931acdaee6708ccc4ffbfa024d556fa4abe20807726b3e1b"
+  },
+  "id": "1kdSemwuNrpWy1g3",
+  "tags": []
+}
