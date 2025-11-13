@@ -1,4 +1,6 @@
 body {
+    margin: 0;
+    padding: 0;
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: auto;
@@ -8,6 +10,16 @@ body {
     font-smooth: always;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
+    background-color: #000000;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
