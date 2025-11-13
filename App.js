@@ -1,6 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import mermaid from "mermaid";
 
 const UPLOAD_WEBHOOK = process.env.REACT_APP_UPLOAD_WEBHOOK;
+
+// Initialize Mermaid
+mermaid.initialize({
+    startOnLoad: true,
+    theme: "default",
+    securityLevel: "loose",
+});
 
 export default function App() {
     const [roleName, setRoleName] = useState("");
@@ -128,6 +136,81 @@ export default function App() {
     );
 }
 
+function MermaidDiagram({ chart }) {
+    const mermaidRef = useRef(null);
+    const [copied, setCopied] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (chart && mermaidRef.current) {
+            const renderDiagram = async () => {
+                try {
+                    setError(null);
+                    const id = `mermaid-${Date.now()}`;
+                    const { svg } = await mermaid.render(id, chart);
+                    if (mermaidRef.current) {
+                        mermaidRef.current.innerHTML = svg;
+                    }
+                } catch (err) {
+                    console.error("Mermaid rendering error:", err);
+                    setError("Failed to render diagram. Please check the Mermaid syntax.");
+                }
+            };
+            renderDiagram();
+        }
+    }, [chart]);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(chart).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    if (!chart) return null;
+
+    return (
+        <div>
+            {/* Code block with copy button */}
+            <div style={{ position: "relative" }}>
+                <button
+                    onClick={copyToClipboard}
+                    style={{
+                        ...styles.copyButton,
+                        background: copied ? "#10b981" : "#4f46e5",
+                    }}
+                >
+                    {copied ? "✓ Copied!" : "Copy Code"}
+                </button>
+                <pre style={styles.codeBlock}>{chart}</pre>
+            </div>
+
+            {/* Rendered diagram */}
+            <div style={{ marginTop: 16 }}>
+                <h4 style={{ fontSize: 13, color: "#6b7280", marginBottom: 8 }}>
+                    Rendered Diagram:
+                </h4>
+                {error ? (
+                    <div style={{ ...styles.error, marginBottom: 0 }}>{error}</div>
+                ) : (
+                    <div
+                        ref={mermaidRef}
+                        style={{
+                            background: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: 10,
+                            padding: 20,
+                            display: "flex",
+                            justifyContent: "center",
+                            overflowX: "auto",
+                        }}
+                    />
+                )}
+            </div>
+        </div>
+    );
+}
+
 function ResultPage({ result, onBack, roleName }) {
     if (!result) {
         return (
@@ -201,10 +284,9 @@ function ResultPage({ result, onBack, roleName }) {
             <section style={styles.sectionBlock}>
                 <h3 style={styles.sectionTitle}>Workflow Diagram (Mermaid)</h3>
                 <p style={{ fontSize: 12, color: "#6b7280", marginTop: 0 }}>
-                    Copy this code into a Mermaid-compatible viewer (or a future diagram
-                    component) to render the hiring workflow.
+                    Copy the code below or view the rendered diagram.
                 </p>
-                <pre style={styles.codeBlock}>{workflowMermaid}</pre>
+                <MermaidDiagram chart={workflowMermaid} />
             </section>
 
             {/* Relevant Experience */}
@@ -362,5 +444,19 @@ const styles = {
     listItem: {
         marginBottom: 6,
         lineHeight: 1.5,
+    },
+    copyButton: {
+        position: "absolute",
+        top: 8,
+        right: 8,
+        background: "#4f46e5",
+        color: "white",
+        border: "none",
+        borderRadius: 6,
+        padding: "6px 12px",
+        fontSize: 12,
+        fontWeight: 500,
+        cursor: "pointer",
+        zIndex: 10,
     },
 };
