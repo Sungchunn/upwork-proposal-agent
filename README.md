@@ -7,7 +7,7 @@ AI-powered tool that generates tailored technical proposals for Upwork job posti
 ### Job Input Form
 ![Job Input Form](assets/app-ui-dark-mode.png)
 
-### Results View
+### n8n workflow
 ![Analysis Results](assets/app-ui-results.png)
 
 The application features a clean, dark mode interface for analyzing Upwork job postings and generating tailored proposals.
