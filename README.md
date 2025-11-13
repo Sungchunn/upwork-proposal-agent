@@ -2,9 +2,13 @@
 
 AI-powered tool that generates tailored technical proposals for Upwork job postings. Submit a job description and receive a structured analysis with pain points, technical solutions, workflow diagrams, and relevant experience mapping.
 
-## n8n Workflow
+## Application UI
 
-![n8n Workflow](assets/Screenshot%202025-11-13%20at%2017.49.19.png)
+![Upwork Proposal Analyzer UI](assets/app-ui-dark-mode.png)
+
+The application features a clean, dark mode interface for analyzing Upwork job postings and generating tailored proposals.
+
+## How It Works
 
 The workflow processes job descriptions through multiple AI agents to extract key insights and generate comprehensive proposal content, including:
 
